@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://wwl717.github.io</id>
+    <title>龙行天下</title>
+    <updated>2025-12-27T11:27:40.359Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://wwl717.github.io"/>
+    <link rel="self" href="https://wwl717.github.io/atom.xml"/>
+    <subtitle>温故而知新</subtitle>
+    <logo>https://wwl717.github.io/images/avatar.png</logo>
+    <icon>https://wwl717.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2025, 龙行天下</rights>
+    <entry>
+        <title type="html"><![CDATA[不同品牌的路由器之间，如何组mesh网络——最详细的mesh组网解释]]></title>
+        <id>https://wwl717.github.io/post/bu-tong-pin-pai-de-lu-you-qi-zhi-jian-ru-he-zu-mesh-wang-luo-zui-xiang-xi-de-mesh-zu-wang-jie-shi/</id>
+        <link href="https://wwl717.github.io/post/bu-tong-pin-pai-de-lu-you-qi-zhi-jian-ru-he-zu-mesh-wang-luo-zui-xiang-xi-de-mesh-zu-wang-jie-shi/">
+        </link>
+        <updated>2025-12-27T11:15:36.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://wwl717.github.io/post-images/1766834162706.jpg" alt="" loading="lazy"><br>
+大家都知道单个路由器的信号覆盖范围是有限的，所以空间再大了，就需要多个路由器配合来完成空间覆盖（我这里为省事就那两个路由器举例）。</p>
+<p>那么既然是两个路由器一起工作，他们就需要商量如何一起协同工作。我们通常把每个需要协同工作的路由器叫做无线ap。</p>
+<p>于是就有了这么三种协商结果</p>
+<p>WDS技术也叫无线桥接，用一台路由器<strong>无线连接</strong>另一台路由器 。不过这个技术没有解决信号切换的问题。手机经常会死抱着最后的一格信号而拒绝接入一个信号满格的AP。</p>
+<p>这时候就需要我们手动切换信号，这么反人类的东西十年前就应该被淘汰了。但是直到现在购物平台上还在热卖。我也实在想不通。</p>
+<p>除了能桥接以外，我们还需要自动漫游技术（或者叫无缝漫游）这样手机才会自动去链接信号比较好的那个路由器。</p>
+<p>AC+AP 简单的说就是加了一个领导来管理和协调工作。这样的工作的效果是上去了，不过整体的成本上来了。一般家庭使用的话也并不推荐。</p>
+<p>最后一个是mesh网络，它优点是组网灵活。既能达到手机在AP间自由切换的目的，也不需要加任何AC来协调工作。两个AP信号不够时就可以再加一台来增加信号覆盖，非常的灵活。</p>
+<p>不过目前市面上的路由器只能在同品牌之间组mesh网络，或者你买了一台路由器刷了openwrt系统，它就不能和品牌的路由器组网了。这个要这么解决呢？</p>
+<p>要解决这个问题，我们必须要了解mesh组网的工作原理。</p>
+<figure data-type="image" tabindex="1"><img src="attachment:40240649-1f00-4c46-a577-8af3ceaed7e8:image1.png" alt="descript" loading="lazy"></figure>
+<p>我们看下这幅图，你会发现。mesh组网解决的是路由器之间的传输问题。其中无线回程使用了802.11s的协议。</p>
+<p>而真正实现WiFi自动漫游（或者叫无缝漫游）的是kvr协议，而且因为协议r只是起到快速切换的作用，所以很多路由器只支持了kv两种协议，同样可以实现自动漫游。</p>
+<p>另外这些协议需要你的手机、电脑设备和路由器同时支持才会生效。不过现在我们使用的手机大部分是可以支持这些协议的。比如苹果手机公布的信息它们在iPhone6s的设备上就实现了kvr三大漫游协议的支持，8年前推出的机型了。所以大家使用的的智能手机应该都是支持自动漫游的。</p>
+<p>了解了这些知识以后，我们就知道。只要把两台路由器用有线或者无线的方式连接。并且打开路由器上的KVR协议就可以实现和mesh网络同样的效果。大概得网络架构如图。</p>
+<figure data-type="image" tabindex="2"><img src="attachment:7fe618fc-44d2-423c-b6ec-a822f90eb7fe:image2.png" alt="descript" loading="lazy"></figure>
+<p>接下来我们用两台不同品牌路由器做演示。其中一台红米的AX6000 ，另外一台是TPlink的XDR6088 这两台路由器我都已经刷成了openwrt系统。不会刷机的可以参考我的前两期视频。刷了第三方系统之后，路由器的无线设定会比较丰富。方便做一些细节设置，当然用潘多拉或者梅林的系统也能达到同样的效果。参数设置也是类似。</p>
+<p>至于品牌路由的原系统，理论上可以通过类似设置达到无线漫游的结果。这个我会在视频最后总结。</p>
+<p>这里我们先演示下openwrt系统下的设置。</p>
+<ol>
+<li>有线回程</li>
+</ol>
+<blockquote>
+<p>我们先演示下两台路由器在有线回程下的mesh网络。网络需要两台路由器通过一条网线连接。</p>
+<figure data-type="image" tabindex="3"><img src="attachment:41d016f4-72e8-442d-80b8-aa24efbb3788:image3.png" alt="descript" loading="lazy"></figure>
+</blockquote>
+<p>主路由先不做改动，先设置下副路由。我们先来联通两台路由器。</p>
+<blockquote></blockquote>
+<p>我们进入路由器的openwrt，选择网络——接口，找到LAN，点击修改。</p>
+<figure data-type="image" tabindex="4"><img src="attachment:8aa65a1c-a833-43cb-aa16-fb8542d4545f:image5.png" alt="descript" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="attachment:3ba463a9-937e-4ccc-ae3a-5ce475d00bdd:image6.png" alt="descript" loading="lazy"></figure>
+<p>在基本设置这里修改IP和网关。设置之后IP地址会有变化，我们需要重新用192.168.50.2重新登录到路由器界面。</p>
+<figure data-type="image" tabindex="6"><img src="attachment:678fa5cf-5e61-4743-8845-61739cfa9304:image7.png" alt="descript" loading="lazy"></figure>
+<p>关掉副路由器的DHCP功能。</p>
+<figure data-type="image" tabindex="7"><img src="attachment:8262b780-021e-4bf9-80b6-890e39ba7a07:image8.png" alt="descript" loading="lazy"></figure>
+<p>再点到IPv6设置，将ipv6的服务也禁用掉。点击保存并应用。此时我们用有线连接到副路由，看看能不能上网。如果可以上网就表明以上这些设置成功了。</p>
+<h3 id="注意接下来的步骤需要分别在主副路由器上设置默认情况下主副路由上的设置内容要求一致个别设置会有不同到时候我会特别指出">注意：接下来的步骤需要分别在主副路由器上设置，默认情况下主副路由上的设置内容要求一致（个别设置会有不同，到时候我会特别指出）。</h3>
+<figure data-type="image" tabindex="8"><img src="attachment:e3a5a9fd-ff7b-456d-ab19-f3c44bdbd8bd:image9.png" alt="descript" loading="lazy"></figure>
+<p>接着我们点击系统，软件包。在过滤器里输入“wpa”点击查找。</p>
+<figure data-type="image" tabindex="9"><img src="attachment:e7caf8b9-f1eb-43e6-973d-d09e1c4f8f18:image10.png" alt="descript" loading="lazy"></figure>
+<p>找到wpad的WiFi设置，我们看到目前这个是basic版本的。</p>
+<p>如果看到是我们需要安装wpad-mesh-openssl或wpad-mesh-wolfssl。没有mesh字样的插件有可能无法无线漫游，“basic”或者“mini”版本的插件无法设置有线漫游。这里需要注意下。</p>
+<figure data-type="image" tabindex="10"><img src="attachment:e3b7a44e-e05c-4ddd-a2e6-aa0305f205bc:image11.png" alt="descript" loading="lazy"></figure>
+<p>如果是其他版本的wpad插件，我们需要先删除原有插件。</p>
+<figure data-type="image" tabindex="11"><img src="attachment:0192f9cc-d0ec-4040-8767-84e1e9461523:image12.png" alt="descript" loading="lazy"></figure>
+<figure data-type="image" tabindex="12"><img src="attachment:cad29a48-d719-4ce1-85da-ad30720edce3:image13.png" alt="descript" loading="lazy"></figure>
+<p>然后到可用软件包里找到，wpad-mesh-openssl或wpad-mesh-wolfssl。并选择安装。</p>
+<figure data-type="image" tabindex="13"><img src="attachment:186bafe6-0d31-4355-86b7-d30812b5dabb:image14.png" alt="descript" loading="lazy"></figure>
+<p>再找到网络——无线设置。这里我们看到有两个无线通道，分别标注着2.4G和5G的频段，这是目前最典型的双频路由器的两个频段。</p>
+<p>我们这里只设置5G频段的漫游即可，因为一般2.4G频段我会留给智能开关，插座。这些设备一般都是固定位置的，不需要漫游。</p>
+<p>如果你有需要，设置的步骤和5G频道是一样的。你可以依葫芦画瓢的弄一下就行了。</p>
+<figure data-type="image" tabindex="14"><img src="attachment:aa7113b1-fabf-4fd7-8a5e-296fd51cbb93:image15.png" alt="descript" loading="lazy"></figure>
+<p>我们点击修改进入到无线设置里。</p>
+<figure data-type="image" tabindex="15"><img src="attachment:40639dd8-6581-4232-96fa-ca35b9b9faae:image16.png" alt="descript" loading="lazy"></figure>
+<p>下拉，找到接口配置。模式保持默认的“接入点AP”。ESSID就是无线名称，这里主副路由要设置成一样。</p>
+<figure data-type="image" tabindex="16"><img src="attachment:e8a229a1-fc25-4de4-99aa-01c7f83b19d7:image17.png" alt="descript" loading="lazy"></figure>
+<p>再无线安全里，选择“WPA2-PSK”加密方式，算法选择“强制ccmp（AES）”。正常设置一个密码，然后把下面的802.11K、802.11V、802.11R三个选项全部勾选起来。</p>
+<figure data-type="image" tabindex="17"><img src="attachment:4a3c02d5-89ba-4c11-8548-7fcf25f26a6c:image18.png" alt="descript" loading="lazy"></figure>
+<p>nasid只每个无线AP的标识，主副路由需要填写不同。我这里就用网卡的Mac地址区分。</p>
+<p>按照片提示，填写以下802.11r的信息。主副路由都要填写。</p>
+<figure data-type="image" tabindex="18"><img src="attachment:7d50aa77-4e7c-49d1-8039-a951de430af4:image19.png" alt="descript" loading="lazy"></figure>
+<p>填写完毕后，点击“保存并应用”来完成设置。</p>
+<p>通常情况，此时mesh网络已经生效。用设备测试一下发现可以无线漫游，但是漫游发生的不是特别积极。</p>
+<p>这里我有做了一些优化。</p>
+<figure data-type="image" tabindex="19"><img src="attachment:029ec4db-79fe-4435-8c71-1f8d766107d9:image20.png" alt="descript" loading="lazy"></figure>
+<figure data-type="image" tabindex="20"><img src="attachment:ab28cf65-2177-4a35-bd33-dac853c72f07:image21.png" alt="descript" loading="lazy"></figure>
+<p>列表示范：</p>
+<p>一顿猛如虎的操作以后，漫游效果好了不少。</p>
+<figure data-type="image" tabindex="21"><img src="attachment:b6566a99-965d-4c63-9cf8-dd567087795d:image22.jpg" alt="descript" loading="lazy"></figure>
+<p>这是我用小米10 Pro测试的漫游结果，一共发生了三次漫游。切换的阈值大约是在70-dBm-75dBm之间。测试效果比我之前用过的mesh套装要稍差一点。不过基本还能让人满意。</p>
+<p>以上是有线mesh的效果，如果两个路由器间没有网线预埋。就只能用无线回程了。下面我就就介绍下无线mesh的设置过程。</p>
+<figure data-type="image" tabindex="22"><img src="attachment:a0089106-44c5-4b31-aff6-0f76621627ff:image23.png" alt="descript" loading="lazy"></figure>
+<p>在无线这里选择添加</p>
+<figure data-type="image" tabindex="23"><img src="attachment:4ea7c0d3-e84f-4036-9a83-34b79656aef9:image24.png" alt="descript" loading="lazy"></figure>
+<figure data-type="image" tabindex="24"><img src="attachment:e59c97df-f732-45d3-912d-c100e6ce8231:image25.png" alt="descript" loading="lazy"></figure>
+<p>如果你的两个路由器之间的信号强度不好，就要把这个剔除弱信号的勾选去掉。否则有可能连接不成功。当然我不建议两个路由器之间摆放的太远。</p>
+<figure data-type="image" tabindex="25"><img src="attachment:ba349016-dfd8-4faf-b575-7289e64eef36:image26.png" alt="descript" loading="lazy"></figure>
+<p>同样的设置也在主路由上做一遍，然后这时一定要马上把主副路由的网线断开。（这种方式有线回程和无线回程无法自动切换，我们需要手动切换）</p>
+<p>看到以上的信息，就说明无线回程已经建立成功。</p>
+<figure data-type="image" tabindex="26"><img src="attachment:a397e936-fab8-4202-80fe-16af566e7beb:image27.png" alt="descript" loading="lazy"></figure>
+<p>当然也可以给这个mesh网络加一个密码，这样数据传输会更安全。不过我觉得这个并没有太多的必要。</p>
+<figure data-type="image" tabindex="27"><img src="attachment:1e25e261-b16e-43f1-a7db-6d079b1c77cc:image28.png" alt="descript" loading="lazy"></figure>
+<p><strong>注意：切换到有线回程时，需要把先无线回程的mesh停用掉。否则会引起网络环路！</strong></p>
+<h3 id="实际效果对比">实际效果对比</h3>
+<p>漫游效果大家已经看过了，基本还是比较满意的。接下来我简单做一个带宽测试。看下mesh网络下的带宽究竟如何。</p>
+<p>这里我简单的做一个最直观的大文件传送测试。</p>
+<p>家里太小，只有80多平方。明明单个路由器就可以覆盖，测试mesh网络就有点勉强了。</p>
+<p>路由器放在客厅，我把笔记本搬到了隔两道墙的院子里做测试。</p>
+<p>这个是测试结果，我们实际上在院子里大约维持在70dBm，高功率的FEM芯片在这样的条件下还是有一定的速率的。</p>
+<p>换上了有线回程之后，无线的上传和下载速度都可以跑满。带宽有了很大的提升，但是组无线mesh时遇到了一些问题。传输速度很不稳定，甚至时长会断联。</p>
+<p>拓展：EasyMesh由Wi-Fi联盟推出，旨在实现多个AP Wi-Fi网络的相互连接和控制，无论这些网络设备来自哪个厂商。使用EasyMesh标准，不同制造商的Mesh WiFi硬件可以兼容。</p>
+<p>也就是说，可以将来自不同品牌的Mesh WiFi设备组合在一起使用，并建立一个统一的、无缝的WiFi网络。EasyMesh使用通用标准，允许来自多个不同品牌的设备加入，从而提高了设备之间的互操作性。EasyMesh的最新版本是EasyMesh R2。</p>
+<p>不过支持easymesh功能的路由器目前是在不多，在openWRT系统的easymesh插件不可以直接安装，只有需要编译过来才能用。除了openWRT以外就只有个别的运营商定制版本的路由器支持easymesh。</p>
+<p>不过通过以上方法可以设置mesh网络并实现无线漫游。虽然在设置上麻烦了一些，不过好在只用设置一次。而且效果上也不输于品牌路由的mesh网络。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[红米ax3000 CR880X系列免拆机刷机教程]]></title>
+        <id>https://wwl717.github.io/post/hong-mi-ax3000-cr880x-xi-lie-mian-chai-ji-shua-ji-jiao-cheng/</id>
+        <link href="https://wwl717.github.io/post/hong-mi-ax3000-cr880x-xi-lie-mian-chai-ji-shua-ji-jiao-cheng/">
+        </link>
+        <updated>2025-12-27T11:11:24.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://wwl717.github.io/post-images/1766834043121.jpg" alt="" loading="lazy">1、永久固化ssh密码</p>
+<p>想要永久固化的话, 在/etc/rc.local最后一行上面加一行</p>
+<pre><code>echo -e'root\nroot'|passwd root
+
+</code></pre>
+<p>修改好的配置文件，我们还需要把它重新上传到路由器的原文件夹下。覆盖掉原文件。这样固化密码的步骤就完成了。</p>
+<p>2、 刷写固件</p>
+<p>openWRT固件下载链接：</p>
+<p>https://github.com/hzyitc/openwrt-redmi-ax3000/releases</p>
+<p>我们先用SSH的方式登录到路由器。然后键入命令查看路由器的分区情况，</p>
+<pre><code>cat /proc/mtd
+
+</code></pre>
+<pre><code>dev: size erasesize name
+mtd0: 00080000 00020000&quot;0:SBL1&quot;
+mtd1: 00080000 00020000&quot;0:MIBIB&quot;
+mtd2: 00040000 00020000&quot;0:BOOTCONFIG&quot;
+mtd3: 00040000 00020000&quot;0:BOOTCONFIG1&quot;
+mtd4: 00100000 00020000&quot;0:QSEE&quot;
+mtd5: 00100000 00020000&quot;0:QSEE_1&quot;
+mtd6: 00040000 00020000&quot;0:DEVCFG&quot;
+mtd7: 00040000 00020000&quot;0:DEVCFG_1&quot;
+mtd8: 00040000 00020000&quot;0:CDT&quot;
+mtd9: 00040000 00020000&quot;0:CDT_1&quot;
+mtd10: 00080000 00020000&quot;0: APPSBLENV&quot;
+mtd11: 00140000 00020000&quot;0:APPSBL&quot;#u-boot
+mtd12: 00140000 00020000&quot;0:APPSBL_1&quot;#u-boot
+mtd13: 00100000 00020000&quot;0:ART&quot;
+mtd14: 00080000 00020000&quot;0:TRAINING&quot;
+mtd15: 00080000 00020000&quot;bdata&quot;
+mtd16: 00080000 00020000&quot;crash&quot;
+mtd17: 00080000 00020000&quot;crash_log&quot;
+mtd18: 02400000 00020000&quot;rootfs&quot;#系统分区1
+mtd19: 02400000 00020000&quot;rootfs_1&quot;#系统分区2
+mtd20: 01f00000 00020000&quot;overlay&quot;
+mtd21: 00d80000 00020000&quot;data&quot;
+mtd22: 00364000 0001f000&quot;kernel&quot;
+mtd23: 0158e000 0001f000&quot;ubi_rootfs&quot;
+mtd24: 01b20000 0001f000&quot;rootfs_data&quot;
+mtd25: 00a2c000 0001f000&quot;data_ignor_reset&quot;
+
+</code></pre>
+<p>这些就是目前路由器的分区情况</p>
+<p>这里简单的介绍一下小米路由器的分区，第11和12分区是存放uboot的地方，这个有点类似电脑上的efi分区。而mtd18和mtd19实际上就是系统分区。</p>
+<p>然后执行这段代码查看反馈结果：</p>
+<pre><code>nvram get flag_last_success
+
+</code></pre>
+<p>如果反馈结果是0 说明目前的系统在mtd18。我们就需要把启动分区切换到另外一个分区。如果反馈结果是1 的话，我们就跳过这步。</p>
+<p>我们看到反馈结果是0，我们去执行下面代码。</p>
+<pre><code>nvram set flag_last_success=1
+nvram set flag_boot_rootfs=1
+nvram commit
+reboot
+
+</code></pre>
+<p>运行代码之后等待系统重启，然后ssh登陆。再次输入查询代码查看反馈</p>
+<pre><code>nvram get flag_last_success
+
+</code></pre>
+<p>我们看到这回的反馈结果就是1了</p>
+<p>我们继续下一步</p>
+<p>接下来把要刷机的固件上传到路由器的tmp文件夹下。</p>
+<p>然后运行这段代码就可以进行刷机了</p>
+<pre><code>ubiformat /dev/mtd18 -y -f /tmp/openwrt-ipq50xx-arm-redmi_ax3000-squashfs-nand-factory.ubi
+
+</code></pre>
+<p>注意看这里的完整的固件文件名是：（openwrt-ipq50xx-arm-redmi_ax3000-squashfs-nand-factory.ubi）</p>
+<p>大家在运行之前要注意核对一下代码里的固件的文件名。要和你所刷的固件文件名需要一致。</p>
+<p>固件刷写完毕之后</p>
+<p>我们再去执行这段代码，把启动分区改回mtd18</p>
+<p>#修改启动分区为0(rootfs_1为1, 原厂的rootfs为0)</p>
+<pre><code>nvramsetflag_last_success=0
+nvramsetflag_boot_rootfs=0
+nvram commit
+reboot
+
+</code></pre>
+<p>耐心等待机器重启完毕。然后用192.168.1.1的ip登录到op系统。</p>
+<p>这个系统默认是没有密码的，也没有任何的中文包和插件。相当于是一个毛坯房。</p>
+<p>我在这里简单演示一下，中文包的安装方法。</p>
+<p>我们ssh登录后可以用这个命令进行一键换源</p>
+<pre><code>sed -i's_downloads.openwrt.org_mirrors.aliyun.com/openwrt_' /etc/opkg/distfeeds.conf
+
+</code></pre>
+<p>换源之后，再来到network-interfaces里把WAN口设置一下。让路由器可以连接网络。我这里是直接把它挂在我的主路由下面。</p>
+<p>做完这些之后，我们再来到system——software下点击一下这个update lists（更新列表）</p>
+<p>这样就可以把插件列表更新出来了。</p>
+<p>然后依次搜索这三个软件包进行安装。</p>
+<p>安装中文包</p>
+<p>点——system/software/update list</p>
+<p>然后搜索base-zh-cn、opkg-zh-cn、firewall-zh-cn，安装三个软件包。</p>
+<p>软件包更新完了以后系统就会自动显示为中文了。</p>
+<p>因为路由器里有两个分区，刷好了op系统之后，我们还可以在ssh里输入以下命令进行启动分区的切换。用回到小米的原系统，这样就可以使用双系统了。</p>
+<p>执行了切换分区的代码之后，我们再重启一下路由器。</p>
+<p>然后就可以用192.168.10.1的ip地址登录另一个分区里的小米原系统了。</p>
+<pre><code>fw_setenv  flag_last_success1
+fw_setenv flag_boot_rootfs1
+reboot
+
+</code></pre>
+<p>另外如果你要想保留这个双系统，记得要小米系统中把系统里的自动更新功能关闭掉。</p>
+<p>想要再切换回openWRT的分区则要用以下这段代码，注意在不同系统的切换命令会有所不同。</p>
+<p>所以从op系统切换到小米原系统，和从小米系统切换回op系统的代码是不同的。</p>
+<pre><code>nvramset flag_last_success=0
+nvramset flag_boot_rootfs=0
+nvramcommit
+reboot
+
+</code></pre>
+<p>还有就是以上刷机方法刷坏了也不要紧，可以利用小米的救砖工具直接救回。还是挺方便的。</p>
+<p>救砖以后再用这个解锁神器解锁一次路由器就OK了</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[小米手机国际版刷机超详细教程]]></title>
+        <id>https://wwl717.github.io/post/xiao-mi-shou-ji-guo-ji-ban-shua-ji-chao-xiang-xi-jiao-cheng/</id>
+        <link href="https://wwl717.github.io/post/xiao-mi-shou-ji-guo-ji-ban-shua-ji-chao-xiang-xi-jiao-cheng/">
+        </link>
+        <updated>2025-12-20T08:23:13.000Z</updated>
+        <content type="html"><![CDATA[<p>小米手机刷国际版系统最关键的准备工作和操作步骤，根据您提供的资料，可以归纳如下：</p>
+<h3 id="一-最关键的准备工作">一、 最关键的准备工作</h3>
+<p>在开始刷机之前，必须完成以下关键的准备工作，以确保刷机过程顺利进行并防止数据丢失或设备锁定：</p>
+<ol>
+<li><strong>解锁 Bootloader (BL 锁)：</strong> 手机必须解锁 BL 锁（bl锁）才能进行刷机操作。</li>
+<li><strong>备份手机数据：</strong> 刷机过程中手机数据会被清除，因此，如果有重要数据，需要提前备份。</li>
+<li><strong>退出谷歌账号：</strong> 如果手机之前登录过谷歌账号，需要在刷机前先退出登录。</li>
+<li><strong>下载必要的工具和固件：</strong>
+<ul>
+<li>下载刷机工具 <strong>MiFlash</strong>（2018 或 2020 版本均可使用）。</li>
+<li>根据手机型号搜索并下载对应的<strong>国际版或欧版固件</strong>。</li>
+<li><strong>选择正确的固件版本：</strong> 建议下载与手机当前系统版本（如 MIUI 14 或 OS1）对应的国际版固件版本。</li>
+</ul>
+</li>
+<li><strong>解压文件：</strong> 将下载的 MiFlash 刷机工具和国际版固件包解压出来。</li>
+</ol>
+<h3 id="二-核心操作步骤">二、 核心操作步骤</h3>
+<p>核心操作步骤主要包括安装驱动、进入刷机模式、设置 MiFlash 工具以及刷机后的初始设置：</p>
+<h4 id="1-刷机前设置与连接">1. 刷机前设置与连接</h4>
+<ol>
+<li><strong>安装驱动：</strong> 打开 MiFlash 刷机工具，如果是第一次使用，需要点击安装驱动。</li>
+<li><strong>进入 FASTBOOT 模式：</strong> 将手机关机，同时按住<strong>电源键和音量减键</strong>，使手机进入 FASTBOOT 模式。</li>
+<li><strong>连接电脑：</strong> 通过数据线将手机与电脑连接。</li>
+<li><strong>加载设备：</strong> 在 MiFlash 工具中点击“加载设备”；如果显示了设备型号，则表示连接成功。</li>
+</ol>
+<h4 id="2-设置刷机选项与开始刷机">2. 设置刷机选项与开始刷机</h4>
+<ol>
+<li><strong>选择固件路径：</strong> 复制刚刚解压出来的国际版固件的目录地址（确保地址中<strong>不要有中文</strong>），并粘贴到 MiFlash 工具中。</li>
+<li><strong>选择清除模式（关键）：</strong> MiFlash 工具下方的选项默认是“全部删除并锁定”；<strong>必须将其更改为“全部删除”</strong>。</li>
+<li><strong>开始刷机：</strong> 确认选择“全部删除”并粘贴了正确的固件路径后，点击“刷机”。</li>
+<li><strong>等待：</strong> 在刷机过程中，<strong>严禁拔下数据线</strong>，需要耐心等待刷机完成（耗时可能因固件不同而异）。</li>
+</ol>
+<h4 id="3-刷机后的初始设置关键">3. 刷机后的初始设置（关键）</h4>
+<ol>
+<li><strong>手机重启：</strong> 刷机完成后手机会自动重启。</li>
+<li><strong>进入设置界面：</strong> 等待手机进入设置界面，选择语言和地区。</li>
+<li><strong>开启飞行模式（关键）：</strong> 在设置过程中，按住电源键不放，开启<strong>飞行模式</strong>。</li>
+<li><strong>跳过网络连接（关键）：</strong> 点击跳过 Wi-Fi 连接，<strong>不要连接网络</strong>。</li>
+<li><strong>完成设置：</strong> 按照提示完成基础设置（如跳过密码设置等）。</li>
+<li><strong>正常使用：</strong> 如果出现提示表示设置完成（即使提示没有连接网络），即可正常使用。国际版系统此时自带谷歌框架和谷歌商店。</li>
+</ol>
+<p>完成上述步骤后，即可打开谷歌 Play 商店，登录谷歌账号并下载应用。需要注意的是，如果不按要求在设置时开启飞行模式并跳过 Wi-Fi 连接，可能需要返回第一步重新设置。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[谷歌云永久免费VPS的5个真相：你不知道的“几乎”免费秘密]]></title>
+        <id>https://wwl717.github.io/post/gu-ge-yun-yong-jiu-mian-fei-vps-de-5-ge-zhen-xiang-ni-bu-zhi-dao-de-ji-hu-mian-fei-mi-mi/</id>
+        <link href="https://wwl717.github.io/post/gu-ge-yun-yong-jiu-mian-fei-vps-de-5-ge-zhen-xiang-ni-bu-zhi-dao-de-ji-hu-mian-fei-mi-mi/">
+        </link>
+        <updated>2025-12-18T08:12:02.000Z</updated>
+        <content type="html"><![CDATA[<p>引言：开启探索之旅</p>
+<p>在云计算的世界里，“永久免费的VPS”听起来像是一个遥不可及的梦想。许多技术爱好者都曾尝试在谷歌云（GCP）上实现这一目标，但往往因为复杂的规则和隐藏的陷阱而感到困惑，甚至最终被意外扣费。如果你也曾为此感到困扰，那么这篇文章就是为你准备的。我们将深入挖掘谷歌云的免费政策，为你揭示5个最关键、也最令人意外的真相，为你提供一份清晰、安全、可操作的指南，让你真正掌握这个强大的“几乎免费”资源。</p>
+<hr>
+<ol>
+<li>“免费”的真相：并非零成本，而是“几乎”免费</li>
+</ol>
+<p>首先，我们需要打破一个最大的误解：谷歌云的永久免费VPS并非完全零成本。虽然核心的虚拟机使用可以免费，但存在一笔小额且几乎无法避免的费用，这笔费用来自于“CDN互联流量”。</p>
+<p>这种流量主要在你访问那些使用了Cloudflare CDN的大型网站时产生，例如我们熟知的ChatGPT或X（前身为Twitter）。当你通过VPS访问这些服务时，产生的数据交换会被谷歌云归类为付费的CDN互联流量。</p>
+<p>然而，关键在于这笔费用极其微小。根据长达一年的中等强度使用测试，总账单仅为5美分。因此，我们应该将这项服务重新定义为“几乎免费”或“成本可忽略不计”，而不是“完全免费”。理解这一点，是成功使用该资源的第一步。</p>
+<hr>
+<ol start="2">
+<li>免费的基石：两大独立政策的巧妙结合</li>
+</ol>
+<p>能够实现持续免费使用VPS，并非源于谷歌云的某一个“免费VPS”套餐，而是巧妙地结合了其两项完全独立的免费层级政策。</p>
+<p>第一项是免费虚拟机实例政策： 这项政策规定了免费实例的具体硬件和位置配置。要符合条件，你的虚拟机必须满足以下所有要求：</p>
+<ul>
+<li>实例类型： e2-micro (非抢占式)</li>
+<li>地域： 仅限美国的俄勒冈州 (Oregon)、爱荷华州 (Iowa) 或南卡罗来纳州 (South Carolina)。其中，强烈推荐选择俄勒冈州，因为它地处美国西部，地理上距离亚洲最近，延迟相对较低，同时它还是一个免税州，万一产生意外费用也能避免支付额外的税费。</li>
+<li>硬盘： 30 GB 标准永久性磁盘</li>
+</ul>
+<p>第二项是免费网络流量政策： 自2023年10月1日开始，谷歌为所有用户提供每月200GB的免费出站互联网流量。需要特别注意的是，这200GB仅计算出站流量，所有入站流量都是完全免费的。但这里有一个至关重要的细节：这项福利仅适用于**标准层级 (Standard Tier)**的网络服务，而不包括默认设置的“高级层级 (Premium Tier)”。</p>
+<p>只有同时理解并正确应用这两项政策，严格遵守其配置要求，才是实现长期免费使用的根本秘诀。</p>
+<hr>
+<ol start="3">
+<li>魔鬼在细节：一步踏错即付费的配置陷阱</li>
+</ol>
+<p>谷歌云的免费层级是有条件的，任何微小的配置偏差都可能导致账单产生。为了避免“反向被薅羊毛”，创建实例时必须严格遵循以下配置。</p>
+<p>下表总结了所有关键配置项及其唯一正确的免费选项：</p>
+<p>配置项	必须选择<br>
+区域	俄勒冈 (Oregon)、爱荷华 (Iowa) 或 南卡罗来纳 (South Carolina)<br>
+机器系列	E2<br>
+机器类型	e-micro<br>
+引导磁盘类型	标准永久性磁盘<br>
+引导磁盘大小	30 GB<br>
+备份方案	无备份<br>
+外部 IP	临时<br>
+网络服务层级	标准</p>
+<p>除了表格中的内容，还需要警惕几个常见的陷阱。第一，不要选择“静态IP”。虽然静态IP在实例运行时是免费的，但它遵循“不用即付费”的原则，一旦你将实例关机，该IP就会立刻开始计费。第二，务必在网络设置中，将服务层级从默认的“高级”手动更改为“标准”，否则所有出站流量都将产生费用。最后，作为一个实用技巧，建议在创建实例时，顺便在“防火墙”部分勾选“允许HTTP流量”和“允许HTTPS流量”，这样你的VPS就能立刻用于托管网站等常见应用。</p>
+<hr>
+<ol start="4">
+<li>Cloudflare悖论：避免好心办坏事的隐藏费用</li>
+</ol>
+<p>为VPS绑定一个域名并使用Cloudflare进行DNS管理，是许多用户的常规操作。然而，这里存在一个“悖论”：虽然使用Cloudflare的DNS解析服务本身没有问题，但一旦你启用了它的代理服务（即点亮“小黄云”），就会产生意想不到的高额费用。</p>
+<p>原因是，开启Cloudflare代理后，所有流量都会先经过其CDN网络再到达你的VPS。谷歌云会将从你的VPS到Cloudflare服务器的流量全部识别为昂贵的“CDN互联”计费类别，这一操作将完全绕过并作废你每月200GB的标准层级免费流量额度，导致每一字节的流量都被收费。</p>
+<p>为了确保你的VPS保持“几乎免费”，请牢记以下禁忌：</p>
+<ul>
+<li>不要使用 Cloudflare 的 Argo 隧道。</li>
+<li>不要使用 Cloudflare 的 CDN 回源 (即开启“小黄云”)。</li>
+<li>不要开启 Warp 服务。</li>
+</ul>
+<p>这些操作都会让Cloudflare介入你的流量路径，从而导致扣费。</p>
+<hr>
+<ol start="5">
+<li>试用期之后：从“暂停”到“激活”的必经之路</li>
+</ol>
+<p>当为期3个月、价值300美元赠金的初始试用期结束后，会发生什么？谷歌云会自动停止你创建的所有虚拟机实例，服务将被暂停。要继续使用符合免费层级配置的实例，你必须手动升级账号。登录控制台后，你会看到一个醒目的“激活”或“升级”按钮。</p>
+<p>但在点击激活之前，请务必执行一个关键的“安全检查”：再三确认你账户下所有VM实例的配置都完全符合免费层级要求。如果你不确定，最稳妥的做法是先将现有实例彻底删除，然后再点击“激活”，等账号升级成功后再重新创建一个完美符合规范的免费实例。这个步骤是避免因配置错误而在激活后产生巨额账单的终极保险。</p>
+<p>确认无误后，点击激活按钮，将你的试用账号转为正式的付费账号。关于剩余的300美元赠金，请注意：如果你在试用期结束之后才点击激活，所有剩余赠金都将作废。只有在3个月试用期之内激活，剩余的赠金才能被保留并继续使用直到试用期结束。</p>
+<p>好消息是，只要你在试用期结束后的一个月内完成激活，你原有的所有设置和实例都会被完整保留。激活时，系统会要求你绑定一个有效的支付方式，因为你的账号此后将需要为实际产生的费用（例如前文提到的那笔极小的CDN互联费用）负责。</p>
+<hr>
+<p>结语：深思熟虑，方能行远</p>
+<p>谷歌云的永久免费层级是一项非常强大且极具价值的资源，但它并非一个简单的“一键免费”午餐。它奖励的是那些细心、严谨、并愿意花时间理解规则的用户。它的真相并非“完全免费”，而是通过精确的配置和正确的使用习惯，可以实现的“几乎免费”。</p>
+<p>在了解了这些规则和陷阱之后，你认为这个“几乎免费”的强大工具适合你的下一个项目吗？</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[你好朋友]]></title>
+        <id>https://wwl717.github.io/post/ni-hao-peng-you/</id>
+        <link href="https://wwl717.github.io/post/ni-hao-peng-you/">
+        </link>
+        <updated>2025-12-10T08:41:17.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
+<p>在干嘛呢？好久不见<br>
+<img src="https://wwl717.github.io/post-images/1766052581827.png" alt="" loading="lazy"><br>
+<img src="https://wwl717.github.io/post-images/1765358549562.jpg" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Hello Gridea]]></title>
+        <id>https://wwl717.github.io/post/hello-gridea/</id>
+        <link href="https://wwl717.github.io/post/hello-gridea/">
+        </link>
+        <updated>2025-04-30T16:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+<!-- more -->
+<p><a href="https://github.com/getgridea/gridea">Github</a><br>
+<a href="https://gridea.dev/">Gridea 主页</a><br>
+<a href="https://fehey.com/">示例网站</a></p>
+<h2 id="特性">特性👇</h2>
+<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
+<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
+<p>🏷️  你可以对文章进行标签分组</p>
+<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
+<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
+<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
+<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
+<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
+<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
+<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
+<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
+<p>未来，它一定会成为你离不开的伙伴</p>
+<p>尽情发挥你的才华吧！</p>
+<p>😘 Enjoy~</p>
+]]></content>
+    </entry>
+</feed>

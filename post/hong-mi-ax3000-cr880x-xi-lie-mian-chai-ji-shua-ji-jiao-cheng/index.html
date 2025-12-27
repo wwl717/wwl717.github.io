@@ -1,0 +1,321 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>红米ax3000 CR880X系列免拆机刷机教程 | 龙行天下</title>
+<link rel="shortcut icon" href="https://wwl717.github.io/favicon.ico?v=1766834854911">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://wwl717.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="红米ax3000 CR880X系列免拆机刷机教程 | 龙行天下 - Atom Feed" href="https://wwl717.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="1、永久固化ssh密码
+想要永久固化的话, 在/etc/rc.local最后一行上面加一行
+echo -e'root\nroot'|passwd root
+
+
+修改好的配置文件，我们还需要把它重新上传到路由器的原文件夹下。覆盖掉原文件。这样..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://wwl717.github.io">
+  <img class="avatar" src="https://wwl717.github.io/images/avatar.png?v=1766834854911" alt="">
+  </a>
+  <h1 class="site-title">
+    龙行天下
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="https://wwl717.github.io/post/gu-ge-yun-yong-jiu-mian-fei-vps-de-5-ge-zhen-xiang-ni-bu-zhi-dao-de-ji-hu-mian-fei-mi-mi" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="https://wwl717.github.io/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/wwl717" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://x.com/wangwenlong0717" target="_blank">
+          <i class="ri-twitter-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.facebook.com/Tianxia%20Longxing" target="_blank">
+          <i class="ri-facebook-line"></i>
+        </a>
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              红米ax3000 CR880X系列免拆机刷机教程
+            </h2>
+            <div class="post-info">
+              <span>
+                2025-12-27
+              </span>
+              <span>
+                6 min read
+              </span>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://wwl717.github.io/post-images/hong-mi-ax3000-cr880x-xi-lie-mian-chai-ji-shua-ji-jiao-cheng.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p><img src="https://wwl717.github.io/post-images/1766834043121.jpg" alt="" loading="lazy">1、永久固化ssh密码</p>
+<p>想要永久固化的话, 在/etc/rc.local最后一行上面加一行</p>
+<pre><code>echo -e'root\nroot'|passwd root
+
+</code></pre>
+<p>修改好的配置文件，我们还需要把它重新上传到路由器的原文件夹下。覆盖掉原文件。这样固化密码的步骤就完成了。</p>
+<p>2、 刷写固件</p>
+<p>openWRT固件下载链接：</p>
+<p>https://github.com/hzyitc/openwrt-redmi-ax3000/releases</p>
+<p>我们先用SSH的方式登录到路由器。然后键入命令查看路由器的分区情况，</p>
+<pre><code>cat /proc/mtd
+
+</code></pre>
+<pre><code>dev: size erasesize name
+mtd0: 00080000 00020000&quot;0:SBL1&quot;
+mtd1: 00080000 00020000&quot;0:MIBIB&quot;
+mtd2: 00040000 00020000&quot;0:BOOTCONFIG&quot;
+mtd3: 00040000 00020000&quot;0:BOOTCONFIG1&quot;
+mtd4: 00100000 00020000&quot;0:QSEE&quot;
+mtd5: 00100000 00020000&quot;0:QSEE_1&quot;
+mtd6: 00040000 00020000&quot;0:DEVCFG&quot;
+mtd7: 00040000 00020000&quot;0:DEVCFG_1&quot;
+mtd8: 00040000 00020000&quot;0:CDT&quot;
+mtd9: 00040000 00020000&quot;0:CDT_1&quot;
+mtd10: 00080000 00020000&quot;0: APPSBLENV&quot;
+mtd11: 00140000 00020000&quot;0:APPSBL&quot;#u-boot
+mtd12: 00140000 00020000&quot;0:APPSBL_1&quot;#u-boot
+mtd13: 00100000 00020000&quot;0:ART&quot;
+mtd14: 00080000 00020000&quot;0:TRAINING&quot;
+mtd15: 00080000 00020000&quot;bdata&quot;
+mtd16: 00080000 00020000&quot;crash&quot;
+mtd17: 00080000 00020000&quot;crash_log&quot;
+mtd18: 02400000 00020000&quot;rootfs&quot;#系统分区1
+mtd19: 02400000 00020000&quot;rootfs_1&quot;#系统分区2
+mtd20: 01f00000 00020000&quot;overlay&quot;
+mtd21: 00d80000 00020000&quot;data&quot;
+mtd22: 00364000 0001f000&quot;kernel&quot;
+mtd23: 0158e000 0001f000&quot;ubi_rootfs&quot;
+mtd24: 01b20000 0001f000&quot;rootfs_data&quot;
+mtd25: 00a2c000 0001f000&quot;data_ignor_reset&quot;
+
+</code></pre>
+<p>这些就是目前路由器的分区情况</p>
+<p>这里简单的介绍一下小米路由器的分区，第11和12分区是存放uboot的地方，这个有点类似电脑上的efi分区。而mtd18和mtd19实际上就是系统分区。</p>
+<p>然后执行这段代码查看反馈结果：</p>
+<pre><code>nvram get flag_last_success
+
+</code></pre>
+<p>如果反馈结果是0 说明目前的系统在mtd18。我们就需要把启动分区切换到另外一个分区。如果反馈结果是1 的话，我们就跳过这步。</p>
+<p>我们看到反馈结果是0，我们去执行下面代码。</p>
+<pre><code>nvram set flag_last_success=1
+nvram set flag_boot_rootfs=1
+nvram commit
+reboot
+
+</code></pre>
+<p>运行代码之后等待系统重启，然后ssh登陆。再次输入查询代码查看反馈</p>
+<pre><code>nvram get flag_last_success
+
+</code></pre>
+<p>我们看到这回的反馈结果就是1了</p>
+<p>我们继续下一步</p>
+<p>接下来把要刷机的固件上传到路由器的tmp文件夹下。</p>
+<p>然后运行这段代码就可以进行刷机了</p>
+<pre><code>ubiformat /dev/mtd18 -y -f /tmp/openwrt-ipq50xx-arm-redmi_ax3000-squashfs-nand-factory.ubi
+
+</code></pre>
+<p>注意看这里的完整的固件文件名是：（openwrt-ipq50xx-arm-redmi_ax3000-squashfs-nand-factory.ubi）</p>
+<p>大家在运行之前要注意核对一下代码里的固件的文件名。要和你所刷的固件文件名需要一致。</p>
+<p>固件刷写完毕之后</p>
+<p>我们再去执行这段代码，把启动分区改回mtd18</p>
+<p>#修改启动分区为0(rootfs_1为1, 原厂的rootfs为0)</p>
+<pre><code>nvramsetflag_last_success=0
+nvramsetflag_boot_rootfs=0
+nvram commit
+reboot
+
+</code></pre>
+<p>耐心等待机器重启完毕。然后用192.168.1.1的ip登录到op系统。</p>
+<p>这个系统默认是没有密码的，也没有任何的中文包和插件。相当于是一个毛坯房。</p>
+<p>我在这里简单演示一下，中文包的安装方法。</p>
+<p>我们ssh登录后可以用这个命令进行一键换源</p>
+<pre><code>sed -i's_downloads.openwrt.org_mirrors.aliyun.com/openwrt_' /etc/opkg/distfeeds.conf
+
+</code></pre>
+<p>换源之后，再来到network-interfaces里把WAN口设置一下。让路由器可以连接网络。我这里是直接把它挂在我的主路由下面。</p>
+<p>做完这些之后，我们再来到system——software下点击一下这个update lists（更新列表）</p>
+<p>这样就可以把插件列表更新出来了。</p>
+<p>然后依次搜索这三个软件包进行安装。</p>
+<p>安装中文包</p>
+<p>点——system/software/update list</p>
+<p>然后搜索base-zh-cn、opkg-zh-cn、firewall-zh-cn，安装三个软件包。</p>
+<p>软件包更新完了以后系统就会自动显示为中文了。</p>
+<p>因为路由器里有两个分区，刷好了op系统之后，我们还可以在ssh里输入以下命令进行启动分区的切换。用回到小米的原系统，这样就可以使用双系统了。</p>
+<p>执行了切换分区的代码之后，我们再重启一下路由器。</p>
+<p>然后就可以用192.168.10.1的ip地址登录另一个分区里的小米原系统了。</p>
+<pre><code>fw_setenv  flag_last_success1
+fw_setenv flag_boot_rootfs1
+reboot
+
+</code></pre>
+<p>另外如果你要想保留这个双系统，记得要小米系统中把系统里的自动更新功能关闭掉。</p>
+<p>想要再切换回openWRT的分区则要用以下这段代码，注意在不同系统的切换命令会有所不同。</p>
+<p>所以从op系统切换到小米原系统，和从小米系统切换回op系统的代码是不同的。</p>
+<pre><code>nvramset flag_last_success=0
+nvramset flag_boot_rootfs=0
+nvramcommit
+reboot
+
+</code></pre>
+<p>还有就是以上刷机方法刷坏了也不要紧，可以利用小米的救砖工具直接救回。还是挺方便的。</p>
+<p>救砖以后再用这个解锁神器解锁一次路由器就OK了</p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://wwl717.github.io/post/xiao-mi-shou-ji-guo-ji-ban-shua-ji-chao-xiang-xi-jiao-cheng/">
+              <h3 class="post-title">
+                小米手机国际版刷机超详细教程
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '',
+    clientSecret: '',
+    repo: '',
+    owner: '',
+    admin: [''],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://wwl717.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
